@@ -39,7 +39,7 @@ public class AnimeService {
     }
 
     public Mono<Void> delete(int id) {
-        return repository.findById(id)
+        return findById(id)
                 .flatMap(repository::delete)
                 .then();
     }

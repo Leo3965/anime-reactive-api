@@ -58,6 +58,12 @@ class AnimeServiceTest {
 
         BDDMockito.when(animeRepositoryMock.findById(ArgumentMatchers.anyInt()))
                 .thenReturn(Mono.just(anime));
+
+        BDDMockito.when(animeRepositoryMock.save(ArgumentMatchers.any(Anime.class)))
+                .thenReturn(Mono.just(anime));
+
+        BDDMockito.when(animeRepositoryMock.delete(ArgumentMatchers.any(Anime.class)))
+                .thenReturn(Mono.empty());
     }
 
     @Test
@@ -85,6 +91,60 @@ class AnimeServiceTest {
                 .thenReturn(Mono.empty());
 
         StepVerifier.create(animeService.findById(1))
+                .expectSubscription()
+                .expectError(ResponseStatusException.class)
+                .verify();
+    }
+
+    @Test
+    @DisplayName("save an anime when successful")
+    void save() {
+        var toBeSaved = AnimeCreator.createAnimeTonBeSaved();
+
+        StepVerifier.create(animeService.save(toBeSaved))
+                .expectSubscription()
+                .expectNext(anime)
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("delete an anime when successful")
+    void delete() {
+        StepVerifier.create(animeService.delete(1))
+                .expectSubscription()
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("delete return mono error when anime does not exist")
+    void delete_2() {
+        BDDMockito.when(animeRepositoryMock.findById(ArgumentMatchers.anyInt()))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(animeService.delete(1))
+                .expectSubscription()
+                .expectError(ResponseStatusException.class)
+                .verify();
+    }
+
+    @Test
+    @DisplayName("update an anime and returns empty mono when successful")
+    void update() {
+        BDDMockito.when(animeRepositoryMock.save(ArgumentMatchers.any(Anime.class)))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(animeService.update(AnimeCreator.createValidAnime()))
+                .expectSubscription()
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("update returns mono error when anime does not exist")
+    void update_2() {
+        BDDMockito.when(animeRepositoryMock.findById(ArgumentMatchers.anyInt()))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(animeService.update(AnimeCreator.createValidAnime()))
                 .expectSubscription()
                 .expectError(ResponseStatusException.class)
                 .verify();

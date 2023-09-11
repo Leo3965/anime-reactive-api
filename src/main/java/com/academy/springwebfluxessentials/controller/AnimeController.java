@@ -1,4 +1,4 @@
-package com.academy.springwebfluxessentials.Controller;
+package com.academy.springwebfluxessentials.controller;
 
 import com.academy.springwebfluxessentials.domain.Anime;
 import com.academy.springwebfluxessentials.service.AnimeService;
@@ -19,11 +19,13 @@ public class AnimeController {
     private final AnimeService service;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Flux<Anime> listAll() {
         return service.findAll();
     }
 
     @GetMapping(path = "{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Mono<Anime> findById(@PathVariable int id) {
         return service.findById(id);
     }

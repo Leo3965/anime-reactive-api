@@ -1,6 +1,5 @@
-package integration.Controller;
+package com.academy.springwebfluxessentials.controller;
 
-import com.academy.springwebfluxessentials.Controller.AnimeController;
 import com.academy.springwebfluxessentials.domain.Anime;
 import com.academy.springwebfluxessentials.service.AnimeService;
 import com.academy.springwebfluxessentials.util.AnimeCreator;
@@ -22,7 +21,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 @ExtendWith(SpringExtension.class)
-class AnimeControllerIT {
+class AnimeControllerTest {
     @InjectMocks
     private AnimeController controller;
     @Mock
